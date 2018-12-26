@@ -294,6 +294,8 @@
     "rdshDeploymentId": "[concat('Microsoft.Resources/deployments/', variables('rdshDeploymentOnPAW1'))]",
     "rdshDeploymentOnPAW2": "DeployRDSHonPAW2",
     "rdshDeploymentPAW2Id": "[concat('Microsoft.Resources/deployments/', variables('rdshDeploymentOnPAW2'))]",
+    "rdshDeploymentOnPAW3": "DeployRDSHonPAW3",
+    "rdshDeploymentPAW3Id": "[concat('Microsoft.Resources/deployments/', variables('rdshDeploymentOnPAW3'))]",
 
     "deployVMDiagnosticsHost1": "deployVMDiagnosticsHost1",
     "deployVMDiagnosticsHost1Id": "[concat('Microsoft.Resources/deployments/', variables('deployVMDiagnosticsHost1'))]",
@@ -324,7 +326,7 @@
     "deployAntimalwareCB1Id": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalwareCB1'))]",
     "deployAntimalwareCB2": "deployAntimalwareCB2",
     "deployAntimalwareCB2Id": "[concat('Microsoft.Resources/deployments/', variables('deployAntimalwareCB2'))]",
-    
+
     "encryptHost1": "encryptHost1",
     "encryptHost1Id": "[concat('Microsoft.Resources/deployments/', variables('encryptHost1'))]",
     "encryptHost2": "encryptHost2",
@@ -940,6 +942,55 @@
         "parameters": {
           "VMName": {
             "value": "[variables('paw2VMName')]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "assetLocationStorageAccount": {
+            "value": "[variables('assetLocationStorageAccount')]"
+          },
+          "storageAccountKeyviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretName')]"
+            }
+          },
+          "storageAccountSASTokenviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretnameSASurl')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "comments": "Deploy RDSH on Host3",
+      "name": "[variables('rdshDeploymentOnPAW3')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('paw3VMDeployment')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployRDSHTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "VMName": {
+            "value": "[variables('paw3VMName')]"
           },
           "domainName": {
             "value": "[parameters('domainName')]"
