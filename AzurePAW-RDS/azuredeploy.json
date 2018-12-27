@@ -30,7 +30,7 @@
         "description": "Specify the name for the vNet to whcih this server will be deployed."
       }
     },
-    "existingVirtualNetworkResourceGroup": {
+    "existingVirtualNetworkRG": {
       "type": "string",
       "defaultValue": "Add vNet RG Name",
       "metadata": {
@@ -136,49 +136,49 @@
       "metadata": {
         "description": "IP address for RDS Host 1"
       },
-      "defaultValue": "10.0.3.4"
+      "defaultValue": "10.0.7.4"
     },
     "Host2IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Host 2"
       },
-      "defaultValue": "10.0.3.5"
+      "defaultValue": "10.0.7.5"
     },
     "Host3IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Host 3"
       },
-      "defaultValue": "10.0.3.6"
+      "defaultValue": "10.0.7.6"
     },
     "ConnectionBrocker1IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Connection Brocker 1"
       },
-      "defaultValue": "10.0.3.15"
+      "defaultValue": "10.0.3.4"
     },
     "ConnectionBrocker2IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Connection Brocker 2"
       },
-      "defaultValue": "10.0.3.16"
+      "defaultValue": "10.0.3.5"
     },
     "Gateway1IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Gateway 1"
       },
-      "defaultValue": "10.0.3.17"
+      "defaultValue": "10.0.3.6"
     },
     "Gateway2IPAddress": {
       "type": "string",
       "metadata": {
         "description": "IP address for RDS Gateway 2"
       },
-      "defaultValue": "10.0.3.18"
+      "defaultValue": "10.0.3.7"
     },
     "ILBforConnectionBrocker": {
       "type": "string",
@@ -235,8 +235,8 @@
     "OSVersion": "2016-Datacenter",
     "numberOfRdshInstances": 2,
 
-    "RDSsubnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('RdsSubnetName'))]",
-    "RDSHostssubnetResourceID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('RdsHostsSubnetName'))]",
+    "RDSsubnetResourceID": "[resourceId(parameters('existingVirtualNetworkRG'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('RdsSubnetName'))]",
+    "RDSHostssubnetResourceID": "[resourceId(parameters('existingVirtualNetworkRG'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'), parameters('RdsHostsSubnetName'))]",
 
     "primaryAzurePAW1IpAddress": "[parameters('Host1IPAddress')]",
     "primaryAzurePAW2IpAddress": "[parameters('Host2IPAddress')]",
