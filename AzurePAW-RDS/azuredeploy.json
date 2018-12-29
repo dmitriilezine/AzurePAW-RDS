@@ -251,6 +251,7 @@
 
     "ilbTemplateURL": "[concat(variables('assetLocation'),'/data/ilbDeployment.json')]",
     "AzurePAW1VMTemplateURL": "[concat(variables('assetLocation'),'/data/AdminHost1VM.json')]",
+    "cbgwVMTemplateURL": "[concat(variables('assetLocation'),'/data/cbgwVM.json')]",
     "deployRDCBTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDCB.json')]",
     "deployRDGWTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDGW.json')]",
     "deployRDSHTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDSH.json')]",
@@ -620,7 +621,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('AzurePAW1VMTemplateURL')]",
+          "uri": "[variables('cbgwVMTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -659,6 +660,9 @@
           },
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
+          },
+          "ilbID": {
+            "value": "[variables('ilbRDSCBID')]"
           }
         }
       }
@@ -674,7 +678,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('AzurePAW1VMTemplateURL')]",
+          "uri": "[variables('cbgwVMTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -713,6 +717,9 @@
           },
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
+          },
+          "ilbID": {
+            "value": "[variables('ilbRDSCBID')]"
           }
         }
       }
@@ -728,7 +735,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('AzurePAW1VMTemplateURL')]",
+          "uri": "[variables('cbgwVMTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -767,6 +774,9 @@
           },
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
+          },
+          "ilbID": {
+            "value": "[variables('ilbRDSGWID')]"
           }
         }
       }
@@ -782,7 +792,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('AzurePAW1VMTemplateURL')]",
+          "uri": "[variables('cbgwVMTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -821,6 +831,9 @@
           },
           "diagnosticsStorageAccountName": {
             "value": "[parameters('diagnosticsStorageAccountName')]"
+          },
+          "ilbID": {
+            "value": "[variables('ilbRDSGWID')]"
           }
         }
       }

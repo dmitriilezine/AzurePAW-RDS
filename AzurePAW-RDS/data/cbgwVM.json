@@ -105,6 +105,12 @@
       "metadata": {
         "description": "Storage account for VM diagnostics"
       }
+    },
+    "ilbID": {
+      "type": "string",
+      "metadata": {
+        "description": "Internal Load Balancer ID"
+      }
     }
   },
   "variables": {
@@ -134,7 +140,12 @@
               "privateIPAddress": "[parameters('primaryIpAddress')]",
               "subnet": {
                 "id": "[parameters('subnetResourceID')]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(parameters('ilbID'), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
             }
           }
         ]
