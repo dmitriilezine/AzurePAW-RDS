@@ -32,7 +32,8 @@
     <None Include="data\deployRDGW.json" />
     <None Include="data\deployRDSH.json" />
     <None Include="data\encryptVM.json" />
-    <None Include="data\ilbDeployment.json" />
+    <None Include="data\ilbDeploymentCB.json" />
+    <None Include="data\ilbDeploymentGW.json" />
     <None Include="data\vmDiagnostics.json" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>

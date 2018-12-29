@@ -249,7 +249,8 @@
     "ilbRDSCBprivateIPAddress": "[parameters('ILBforConnectionBrocker')]",
     "ilbRDSGWprivateIPAddress": "[parameters('ILBforGateway')]",
 
-    "ilbTemplateURL": "[concat(variables('assetLocation'),'/data/ilbDeployment.json')]",
+    "ilbGWTemplateURL": "[concat(variables('assetLocation'),'/data/ilbDeploymentGW.json')]",
+    "ilbCBTemplateURL": "[concat(variables('assetLocation'),'/data/ilbDeploymentCB.json')]",
     "AzurePAW1VMTemplateURL": "[concat(variables('assetLocation'),'/data/AdminHost1VM.json')]",
     "cbgwVMTemplateURL": "[concat(variables('assetLocation'),'/data/cbgwVM.json')]",
     "deployRDCBTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDCB.json')]",
@@ -426,7 +427,7 @@
       "apiVersion": "2015-01-01",
       "properties": {
         "mode": "Incremental",
-        "templateLink": { "uri": "[variables('ilbTemplateURL')]" },
+        "templateLink": { "uri": "[variables('ilbCBTemplateURL')]" },
         "parameters": {
           "ilbName": { "value": "[variables('ilbRDSCBName')]" },
           "subnetResourceID": { "value": "[variables('RDSsubnetResourceID')]" },
@@ -440,7 +441,7 @@
       "apiVersion": "2015-01-01",
       "properties": {
         "mode": "Incremental",
-        "templateLink": { "uri": "[variables('ilbTemplateURL')]" },
+        "templateLink": { "uri": "[variables('ilbGWTemplateURL')]" },
         "parameters": {
           "ilbName": { "value": "[variables('ilbRDSGWName')]" },
           "subnetResourceID": { "value": "[variables('RDSsubnetResourceID')]" },
