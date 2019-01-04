@@ -121,6 +121,12 @@
       "metadata": {
         "description": "IP address for GW ILB"
       }
+    },
+    "AADAppProxyexternalURL": {
+      "type": "string",
+      "metadata": {
+        "description": "AAD App Proxy External URL"
+      }
     }
   },
   "variables": {
@@ -181,7 +187,8 @@
             "GWShortDNSName": "[variables('GWShortDNSName')]",
             "GWILBIPAddress": "[parameters('GWILBIPAddress')]",
             "DomainDNSName": "[parameters('domainName')]",
-            "DNSServer": "[variables('DNSServer')]"
+            "DNSServer": "[variables('DNSServer')]",
+            "AADAppProxyexternalURL": "[parameters('AADAppProxyexternalURL')]"
           }
         },
         "protectedSettings": {

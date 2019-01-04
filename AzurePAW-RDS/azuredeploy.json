@@ -257,6 +257,12 @@
       "metadata": {
         "description": "Azure SQL DB UID account password"
       }
+    },
+    "AADAppProxyExternalURL": {
+      "type": "string",
+      "metadata": {
+        "description": "AAD App Proxy External URL"
+      }
     }
   },
   "variables": {
@@ -1209,6 +1215,9 @@
           },
           "GWILBIPAddress": {
             "value": "[parameters('ILBforGateway')]"
+          },
+          "AADAppProxyexternalURL": {
+            "value": "[parameters('AADAppProxyExternalURL')]"
           }
         }
       }
