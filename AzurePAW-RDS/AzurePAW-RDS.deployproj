@@ -28,6 +28,7 @@
     <None Include="data\AdminHost1VM.json" />
     <None Include="data\cbgwVM.json" />
     <None Include="data\deployAntimalware.json" />
+    <None Include="data\deployRDCB2.json" />
     <None Include="data\deployRDCB.json" />
     <None Include="data\deployRDGW.json" />
     <None Include="data\deployRDSH.json" />

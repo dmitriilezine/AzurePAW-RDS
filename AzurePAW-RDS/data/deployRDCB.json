@@ -79,6 +79,48 @@
       "metadata": {
         "description": "Name of the third Session Host"
       }
+    },
+    "AzureDBServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Azure SQL DB Server"
+      }
+    },
+    "AzureDBName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Azure SQL DB"
+      }
+    },
+    "AzureDBUID": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Azure SQL UID - admin account for the DB"
+      }
+    },
+    "AzureSQLDBPWD": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for Azure SQL UID"
+      }
+    },
+    "DC1VMName": {
+      "type": "securestring",
+      "metadata": {
+        "description": "VM Name for ADDS DC1"
+      }
+    },
+    "CBILBIPAddress": {
+      "type": "securestring",
+      "metadata": {
+        "description": "IP address for CB ILB"
+      }
+    },
+    "GWILBIPAddress": {
+      "type": "securestring",
+      "metadata": {
+        "description": "IP address for GW ILB"
+      }
     }
   },
   "variables": {
@@ -87,8 +129,11 @@
     "shortDomainName": "[split(parameters('domainName'),'.')[0]]",
     "domainSuffix": "[split(parameters('domainName'),'.')[1]]",
     "CACommonName": "[concat(variables('shortDomainName'),' CA')]",
-    "DNSName": "[concat('rds.',parameters('domainName'))]",
-    "gatewayExternalDNS": "[concat('gateway.',parameters('domainName'))]",
+    "CBShortDNSName": "rds",
+    "GWShortDNSName": "gateway",
+    "CBDNSName": "[concat(variables('CBShortDNSName'),'.',parameters('domainName'))]",
+    "gatewayExternalDNS": "[concat(variables('GWShortDNSName'),'.',parameters('domainName'))]",
+    "DNSServer": "[concat(parameters('DC1VMName'),'.',parameters('domainName'))]",
     "connectionBroker2": "[concat(parameters('cb2VMName'),'.',parameters('domainName'))]",
     "webAccessServer1": "[concat(parameters('gwVMName'),'.',parameters('domainName'))]",
     "webAccessServer2": "[concat(parameters('gw2VMName'),'.',parameters('domainName'))]",
@@ -123,17 +168,27 @@
             "webAccessServer1": "[variables('webAccessServer1')]",
             "webAccessServer2": "[variables('webAccessServer2')]",
             "CACommonName": "[variables('CACommonName')]",
-            "DNSName": "[variables('DNSName')]",
+            "DNSName": "[variables('CBDNSName')]",
             "collectionName": "[variables('collectionname')]",
             "sessionhost1": "[variables('sessionhost1')]",
             "sessionhost2": "[variables('sessionhost2')]",
-            "sessionhost3": "[variables('sessionhost3')]"
+            "sessionhost3": "[variables('sessionhost3')]",
+            "AzureDBServerName": "[parameters('AzureDBServerName')]",
+            "AzureDBName": "[parameters('AzureDBName')]",
+            "AzureDBUID": "[parameters('AzureDBUID')]",
+            "CBShortDNSName": "[variables('CBShortDNSName')]",
+            "CBILBIPAddress": "[parameters('CBILBIPAddress')]",
+            "GWShortDNSName": "[variables('GWShortDNSName')]",
+            "GWILBIPAddress": "[parameters('GWILBIPAddress')]",
+            "DomainDNSName": "[parameters('domainName')]",
+            "DNSServer": "[variables('DNSServer')]"
           }
         },
         "protectedSettings": {
           "items": {
             "adminPassword": "[parameters('adminPassword')]",
-            "configurationUrlSasToken": "[parameters('storageAccountSASTokenviaKeyvault')]"
+            "configurationUrlSasToken": "[parameters('storageAccountSASTokenviaKeyvault')]",
+            "AzureSQLDBPWD": "[parameters('AzureSQLDBPWD')]"
           }
         }
       }

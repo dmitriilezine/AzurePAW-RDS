@@ -82,6 +82,13 @@
       },
       "defaultValue": "Standard_D8S_v3"
     },
+    "DC1VMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify the name of the Domain Controller with DNS. It will be targeted to create ILB DNS A records"
+      },
+      "defaultValue": "Replace with DC1 Name"
+    },
     "adminHost1VMName": {
       "type": "string",
       "metadata": {
@@ -226,6 +233,30 @@
       "metadata": {
         "description": "ADE Key Vault RG"
       }
+    },
+    "AzureSQLDBServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure SQL DB Short Server Name"
+      }
+    },
+    "AzureSQLDBName": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure SQL DB Name"
+      }
+    },
+    "AzureSQLDBUID": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure SQL DB UID account"
+      }
+    },
+    "AzureSQLDBPWD": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure SQL DB UID account password"
+      }
     }
   },
   "variables": {
@@ -254,6 +285,7 @@
     "AzurePAW1VMTemplateURL": "[concat(variables('assetLocation'),'/data/AdminHost1VM.json')]",
     "cbgwVMTemplateURL": "[concat(variables('assetLocation'),'/data/cbgwVM.json')]",
     "deployRDCBTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDCB.json')]",
+    "deployRDCB2TemplateURL": "[concat(variables('assetLocation'),'/data/deployRDCB2.json')]",
     "deployRDGWTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDGW.json')]",
     "deployRDSHTemplateURL": "[concat(variables('assetLocation'),'/data/deployRDSH.json')]",
     "vmDiagnosticsTemplateURL": "[concat(variables('assetLocation'),'/data/vmDiagnostics.json')]",
@@ -290,8 +322,12 @@
     "gw2VMDeploymentId": "[concat('Microsoft.Resources/deployments/', variables('gw2VMDeployment'))]",
     "cb1Deployment": "DeployRDCB-RDLS",
     "cb1DeploymentId": "[concat('Microsoft.Resources/deployments/', variables('cb1Deployment'))]",
-    "gw1Deployment": "DeployRDGW-RDWeb",
+    "cb2Deployment": "DeploySQLDriver-on-CB2",
+    "cb2DeploymentId": "[concat('Microsoft.Resources/deployments/', variables('cb2Deployment'))]",
+    "gw1Deployment": "DeployRDGW-RDWeb-on-GW1",
     "gw1DeploymentId": "[concat('Microsoft.Resources/deployments/', variables('gw1Deployment'))]",
+    "gw2Deployment": "DeployRDGW-RDWeb-on-GW2",
+    "gw2DeploymentId": "[concat('Microsoft.Resources/deployments/', variables('gw2Deployment'))]",
     "rdshDeploymentOnPAW1": "DeployRDSHonPAW1",
     "rdshDeploymentId": "[concat('Microsoft.Resources/deployments/', variables('rdshDeploymentOnPAW1'))]",
     "rdshDeploymentOnPAW2": "DeployRDSHonPAW2",
@@ -889,6 +925,55 @@
       }
     },
     {
+      "comments": "Deploy RDGW and RDWeb on GW VM",
+      "name": "[variables('gw2Deployment')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('gw2VMDeployment')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployRDGWTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "VMName": {
+            "value": "[variables('gw2VMName')]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "assetLocationStorageAccount": {
+            "value": "[variables('assetLocationStorageAccount')]"
+          },
+          "storageAccountKeyviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretName')]"
+            }
+          },
+          "storageAccountSASTokenviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretnameSASurl')]"
+            }
+          }
+        }
+      }
+    },
+    {
       "comments": "Deploy RDSH on Host1",
       "name": "[variables('rdshDeploymentOnPAW1')]",
       "type": "Microsoft.Resources/deployments",
@@ -1038,7 +1123,7 @@
       }
     },
     {
-      "comments": "Deploy RDCB and RDLS on CB VM",
+      "comments": "Deploy RDCB and RDLS on CB VM1",
       "name": "[variables('cb1Deployment')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -1071,10 +1156,10 @@
             "value": "[parameters('adminPassword')]"
           },
           "cb2VMName": {
-            "value": "[variables('paw1VMName')]"
+            "value": "[variables('cb2VMName')]"
           },
           "gw2VMName": {
-            "value": "[variables('paw1VMName')]"
+            "value": "[variables('gw2VMName')]"
           },
           "sh1VMName": {
             "value": "[variables('paw1VMName')]"
@@ -1084,6 +1169,79 @@
           },
           "sh3VMName": {
             "value": "[variables('paw3VMName')]"
+          },
+          "assetLocationStorageAccount": {
+            "value": "[variables('assetLocationStorageAccount')]"
+          },
+          "storageAccountKeyviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretName')]"
+            }
+          },
+          "storageAccountSASTokenviaKeyvault": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('secretsKeyVaultID')]"
+              },
+              "secretName": "[variables('secretnameSASurl')]"
+            }
+          },
+          "AzureDBServerName": {
+            "value": "[parameters('AzureSQLDBServerName')]"
+          },
+          "AzureDBName": {
+            "value": "[parameters('AzureSQLDBName')]"
+          },
+          "AzureDBUID": {
+            "value": "[parameters('AzureSQLDBUID')]"
+          },
+          "AzureSQLDBPWD": {
+            "value": "[parameters('AzureSQLDBPWD')]"
+          },
+          "DC1VMName": {
+            "value": "[parameters('DC1VMName')]"
+          },
+          "CBILBIPAddress": {
+            "value": "[parameters('ILBforConnectionBrocker')]"
+          },
+          "GWILBIPAddress": {
+            "value": "[parameters('ILBforGateway')]"
+          }
+        }
+      }
+    },
+    {
+      "comments": "Deploy SQL Driver on CB VM2",
+      "name": "[variables('cb2Deployment')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[variables('cb2VMDeployment')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployRDCB2TemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "VMName": {
+            "value": "[variables('cb2VMName')]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "cb2VMName": {
+            "value": "[variables('paw1VMName')]"
           },
           "assetLocationStorageAccount": {
             "value": "[variables('assetLocationStorageAccount')]"

@@ -44,15 +44,14 @@
         "description": "Key for the Storage account"
       }
     }
-
   },
   "variables": {
     "ModulesURL": "[concat(parameters('assetLocationStorageAccount'),'/scripts/RDSConfiguration.zip')]",
-    "ConfigurationFunction": "RDSConfiguration1-8.ps1\\SessionHost"
+    "ConfigurationFunction": "RDSConfiguration1-8.ps1\\InstallSQLDriveronCB2VM"
   },
   "resources": [
     {
-      "name": "[concat(parameters('VMName'),'/ConfigureRDSSessionHost')]",
+      "name": "[concat(parameters('VMName'),'/InstallSQLDriveronCB2')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
