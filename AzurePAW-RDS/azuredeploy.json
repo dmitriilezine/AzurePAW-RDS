@@ -1070,11 +1070,20 @@
           "adminPassword": {
             "value": "[parameters('adminPassword')]"
           },
-          "numberOfRdshInstances": {
-            "value": "[variables('numberOfRdshInstances')]"
-          },
-          "sessionHost": {
+          "cb2VMName": {
             "value": "[variables('paw1VMName')]"
+          },
+          "gw2VMName": {
+            "value": "[variables('paw1VMName')]"
+          },
+          "sh1VMName": {
+            "value": "[variables('paw1VMName')]"
+          },
+          "sh2VMName": {
+            "value": "[variables('paw2VMName')]"
+          },
+          "sh3VMName": {
+            "value": "[variables('paw3VMName')]"
           },
           "assetLocationStorageAccount": {
             "value": "[variables('assetLocationStorageAccount')]"

@@ -50,16 +50,34 @@
         "description": "Key for the Storage account"
       }
     },
-    "numberOfRdshInstances": {
-      "type": "int",
+    "cb2VMName": {
+      "type": "string",
       "metadata": {
-        "description": "Number of Remote Desktop Session Hosts"
+        "description": "Name of the second CB"
       }
     },
-    "sessionHost": {
+    "gw2VMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the second GW"
+      }
+    },
+    "sh1VMName": {
       "type": "string",
       "metadata": {
         "description": "Name of the first Session Host"
+      }
+    },
+    "sh2VMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the second Session Host"
+      }
+    },
+    "sh3VMName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the third Session Host"
       }
     }
   },
@@ -70,11 +88,14 @@
     "domainSuffix": "[split(parameters('domainName'),'.')[1]]",
     "CACommonName": "[concat(variables('shortDomainName'),' CA')]",
     "DNSName": "[concat('rds.',parameters('domainName'))]",
-    "gatewayIpRef": "[concat('gateway.',parameters('domainName'))]",
-    "connectionBroker": "[concat('broker.',parameters('domainName'))]",
-    "webAccessServerOLD": "[concat('gateway.',parameters('domainName'))]",
-    "webAccessServer": "[concat(parameters('gwVMName'),'.',parameters('domainName'))]",
-    "sessionHostNamingPrefix": "PAW-"
+    "gatewayExternalDNS": "[concat('gateway.',parameters('domainName'))]",
+    "connectionBroker2": "[concat(parameters('cb2VMName'),'.',parameters('domainName'))]",
+    "webAccessServer1": "[concat(parameters('gwVMName'),'.',parameters('domainName'))]",
+    "webAccessServer2": "[concat(parameters('gw2VMName'),'.',parameters('domainName'))]",
+    "sessionhost1": "[concat(parameters('sh1VMName'),'.',parameters('domainName'))]",
+    "sessionhost2": "[concat(parameters('sh2VMName'),'.',parameters('domainName'))]",
+    "sessionhost3": "[concat(parameters('sh3VMName'),'.',parameters('domainName'))]",
+    "collectionname": "Cloud PAW"
   },
   "resources": [
     {
@@ -97,12 +118,16 @@
               "password": "PrivateSettingsRef:adminPassword"
             },
             "domainName": "[parameters('domainName')]",
-            "externalfqdn": "[variables('gatewayIpRef')]",
-            "numberOfRdshInstances": "[parameters('numberOfRdshInstances')]",
-            "sessionHostNamingPrefix": "[parameters('sessionHost')]",
-            "webAccessServer": "[variables('webAccessServer')]",
+            "externalfqdn": "[variables('gatewayExternalDNS')]",
+            "connectionBroker2": "[variables('connectionBroker2')]",
+            "webAccessServer1": "[variables('webAccessServer1')]",
+            "webAccessServer2": "[variables('webAccessServer2')]",
             "CACommonName": "[variables('CACommonName')]",
-            "DNSName": "[variables('DNSName')]"
+            "DNSName": "[variables('DNSName')]",
+            "collectionName": "[variables('collectionname')]",
+            "sessionhost1": "[variables('sessionhost1')]",
+            "sessionhost2": "[variables('sessionhost2')]",
+            "sessionhost3": "[variables('sessionhost3')]"
           }
         },
         "protectedSettings": {
