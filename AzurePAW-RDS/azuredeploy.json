@@ -1255,10 +1255,7 @@
           "adminPassword": {
             "value": "[parameters('adminPassword')]"
           },
-          "cb2VMName": {
-            "value": "[variables('paw1VMName')]"
-          },
-          "assetLocationStorageAccount": {
+         "assetLocationStorageAccount": {
             "value": "[variables('assetLocationStorageAccount')]"
           },
           "storageAccountKeyviaKeyvault": {
