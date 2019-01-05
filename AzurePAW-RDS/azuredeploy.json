@@ -249,7 +249,7 @@
     "AzureSQLDBUID": {
       "type": "string",
       "metadata": {
-        "description": "Azure SQL DB UID account"
+        "description": "Azure SQL DB UID account, ie adminaccount@dbservername"
       }
     },
     "AzureSQLDBPWD": {
@@ -659,7 +659,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('cbAvailabilitySetName')]"
+        "[variables('cbAvailabilitySetName')]",
+        "[variables('deployILBforRDSCB')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -716,7 +717,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('cbAvailabilitySetName')]"
+        "[variables('cbAvailabilitySetName')]",
+        "[variables('deployILBforRDSCB')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -773,7 +775,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('gwAvailabilitySetName')]"
+        "[variables('gwAvailabilitySetName')]",
+        "[variables('deployILBforRDSGW')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -830,7 +833,8 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('gwAvailabilitySetName')]"
+        "[variables('gwAvailabilitySetName')]",
+        "[variables('deployILBforRDSGW')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -882,7 +886,7 @@
       }
     },
     {
-      "comments": "Deploy RDGW and RDWeb on GW VM",
+      "comments": "Deploy RDGW and RDWeb on GW VM1",
       "name": "[variables('gw1Deployment')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -931,7 +935,7 @@
       }
     },
     {
-      "comments": "Deploy RDGW and RDWeb on GW VM",
+      "comments": "Deploy RDGW and RDWeb on GW VM2",
       "name": "[variables('gw2Deployment')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -985,8 +989,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('paw1VMDeployment')]",
-        "[variables('paw2VMDeployment')]"
+        "[variables('paw1VMDeployment')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1035,7 +1038,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[variables('paw1VMDeployment')]",
         "[variables('paw2VMDeployment')]"
       ],
       "properties": {
@@ -1135,9 +1137,13 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[variables('cb1VMDeployment')]",
+        "[variables('cb2VMDeployment')]",
         "[variables('gw1Deployment')]",
+        "[variables('gw2Deployment')]",
         "[variables('rdshDeploymentOnPAW1')]",
-        "[variables('rdshDeploymentOnPAW2')]"
+        "[variables('rdshDeploymentOnPAW2')]",
+        "[variables('rdshDeploymentOnPAW3')]",
+        "[variables('cb2Deployment')]"
       ],
       "properties": {
         "mode": "Incremental",
