@@ -105,19 +105,19 @@
       }
     },
     "DC1VMName": {
-      "type": "securestring",
+      "type": "string",
       "metadata": {
         "description": "VM Name for ADDS DC1"
       }
     },
     "CBILBIPAddress": {
-      "type": "securestring",
+      "type": "string",
       "metadata": {
         "description": "IP address for CB ILB"
       }
     },
     "GWILBIPAddress": {
-      "type": "securestring",
+      "type": "string",
       "metadata": {
         "description": "IP address for GW ILB"
       }
@@ -127,11 +127,38 @@
       "metadata": {
         "description": "AAD App Proxy External URL"
       }
+    },
+    "cbpfxpwd": {
+      "type": "securestring",
+      "metadata": {
+        "description": "CB PFX PWD"
+      }
+    },
+    "gwpfxpwd": {
+      "type": "securestring",
+      "metadata": {
+        "description": "GW PFX PWD"
+      }
+    },
+    "CBPFXFile": {
+      "type": "string",
+      "metadata": {
+        "description": "CB PFX Filename"
+      }
+    },
+    "GWPFXFile": {
+      "type": "string",
+      "metadata": {
+        "description": "GW PFX Filename"
+      }
     }
   },
   "variables": {
     "ModulesURL": "[concat(parameters('assetLocationStorageAccount'),'/scripts/RDSConfiguration.zip')]",
     "ConfigurationFunction": "RDSConfiguration1-8.ps1\\RDSDeployment",
+    "CBPFXFile": "[concat(parameters('assetLocationStorageAccount'),'/scripts/',parameters('CBPFXFile'))]",
+    "GWPFXFile": "[concat(parameters('assetLocationStorageAccount'),'/scripts/',parameters('GWPFXFile'))]",
+    "CopyPFXFiles": "[concat(parameters('assetLocationStorageAccount'),'/scripts/CopyPFXtoKnownlocation.ps1')]",
     "shortDomainName": "[split(parameters('domainName'),'.')[0]]",
     "domainSuffix": "[split(parameters('domainName'),'.')[1]]",
     "CACommonName": "[concat(variables('shortDomainName'),' CA')]",
@@ -149,6 +176,31 @@
     "collectionname": "Cloud PAW"
   },
   "resources": [
+    {
+      "name": "[concat(parameters('VMName'),'/copyPFXFiles')]",
+      "comments": "Copy PFX Files",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.9",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('CBPFXFile')]",
+            "[variables('GWPFXFile')]",
+            "[variables('CopyPFXFiles')]"
+          ]
+        },
+        "protectedSettings": {
+          "commandToExecute": "[concat('powershell -NoLogo -NoProfile -ExecutionPolicy Unrestricted -File CopyPFXtoKnownlocation.ps1 -CBPFXFile ',parameters('CBPFXFile'),' -GWPFXFile ',parameters('GWPFXFile'),'')]",
+          "storageAccountName": "azurepaw",
+          "storageAccountKey": "[parameters('storageAccountKeyviaKeyvault')]"
+        }
+      }
+    },
     {
       "name": "[concat(parameters('VMName'),'/ConfigureRDCBandRDLS')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -188,18 +240,24 @@
             "GWILBIPAddress": "[parameters('GWILBIPAddress')]",
             "DomainDNSName": "[parameters('domainName')]",
             "DNSServer": "[variables('DNSServer')]",
-            "AADAppProxyexternalURL": "[parameters('AADAppProxyexternalURL')]"
+            "AADAppProxyexternalURL": "[parameters('AADAppProxyexternalURL')]",
+            "CBPFXFILE": "[parameters('CBPFXFile')]",
+            "gwPFXFILE": "[parameters('GWPFXFile')]"
           }
         },
         "protectedSettings": {
           "items": {
             "adminPassword": "[parameters('adminPassword')]",
             "configurationUrlSasToken": "[parameters('storageAccountSASTokenviaKeyvault')]",
-            "AzureSQLDBPWD": "[parameters('AzureSQLDBPWD')]"
+            "AzureSQLDBPWD": "[parameters('AzureSQLDBPWD')]",
+            "cbpfxpwd": "[parameters('cbpfxpwd')]",
+            "gwpfxpwd": "[parameters('gwpfxpwd')]"
           }
         }
       }
     }
+
+
   ],
   "outputs": {}
 }

@@ -263,6 +263,30 @@
       "metadata": {
         "description": "AAD App Proxy External URL"
       }
+    },
+    "CBPFXFileName": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection Broker PFX Cert File Name, ie rds.contoso.com.pfx"
+      }
+    },
+    "CBPFXFilePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Connection Broker PFX Cert Password"
+      }
+    },
+    "GWPFXFileName": {
+      "type": "string",
+      "metadata": {
+        "description": "Gateway PFX Cert File Name, ie gateway.contoso.com.pfx"
+      }
+    },
+    "GWPFXFilePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Gateway PFX Cert Password"
+      }
     }
   },
   "variables": {
@@ -1224,6 +1248,18 @@
           },
           "AADAppProxyexternalURL": {
             "value": "[parameters('AADAppProxyExternalURL')]"
+          },
+          "cbpfxpwd": {
+            "value": "[parameters('CBPFXFilePassword')]"
+          },
+          "gwpfxpwd": {
+            "value": "[parameters('GWPFXFilePassword')]"
+          },
+          "CBPFXFile": {
+            "value": "[parameters('CBPFXFileName')]"
+          },
+          "GWPFXFile": {
+            "value": "[parameters('GWPFXFileName')]"
           }
         }
       }
